@@ -1,0 +1,188 @@
+# 🎓 Student Pass Prediction using AWS SageMaker
+
+## 📌 Project Overview
+
+This project builds and deploys a Machine Learning model using **Logistic Regression** to predict whether a student will pass based on the number of study hours.
+
+The model is deployed using **AWS SageMaker**, enabling real-time predictions via an endpoint.
+
+---
+
+## 🛠️ Tech Stack
+
+* Python
+* Scikit-learn
+* Pandas
+* AWS SageMaker
+* AWS S3
+
+---
+
+## 📁 Project Structure
+
+```
+student-ml-project/
+│
+├── data/
+│   └── student.csv
+├── train.py
+├── requirements.txt
+├── model.joblib
+├── model.tar.gz
+├── deploy.py
+└── README.md
+```
+
+---
+
+## 🚀 Step-by-Step Implementation
+
+### 🔹 Step 1: Prepare Dataset
+
+Create a CSV file:
+
+```
+hours,pass
+1,0
+2,0
+3,0
+4,0
+5,1
+6,1
+7,1
+8,1
+```
+
+---
+
+### 🔹 Step 2: Train Model
+
+Run:
+
+```
+python train.py
+```
+
+✔ This will:
+
+* Train Logistic Regression model
+* Save model as `model.joblib`
+
+---
+
+### 🔹 Step 3: Create Model Archive
+
+Compress the model:
+
+```
+tar -czvf model.tar.gz model.joblib
+```
+
+---
+
+### 🔹 Step 4: Upload to AWS S3
+
+```
+aws s3 cp model.tar.gz s3://your-bucket-name/
+```
+
+---
+
+### 🔹 Step 5: Deploy Model using SageMaker
+
+Run:
+
+```
+python deploy.py
+```
+
+✔ This will:
+
+* Create SageMaker model
+* Deploy endpoint
+* Load trained model
+
+---
+
+### 🔹 Step 6: Make Predictions
+
+Example:
+
+```
+predictor.predict("6")
+```
+
+✔ Output:
+
+```
+[1]
+```
+
+Meaning → Student will pass ✅
+
+---
+
+## ⏱️ Deployment Time
+
+* Endpoint creation: **5–10 minutes**
+* Prediction response: **~1 second**
+
+---
+
+## ⚠️ Important Notes
+
+### 🔸 1. Endpoint Cost
+
+SageMaker endpoints run continuously.
+
+👉 Stop after use:
+
+```
+predictor.delete_endpoint()
+```
+
+---
+
+### 🔸 2. Common Issues & Fixes
+
+| Issue                        | Fix                                       |
+| ---------------------------- | ----------------------------------------- |
+| Endpoint stuck in "Creating" | Use `ml.m5.large` instance                |
+| `train.py not found`         | Ensure correct working directory          |
+| 500 Internal Server Error    | Add `input_fn`, `predict_fn`, `output_fn` |
+| Prediction fails             | Use correct serializer (`CSVSerializer`)  |
+
+---
+
+## 🧠 Working Flow
+
+```
+Dataset → Train Model → Save (joblib)
+→ Compress (tar.gz) → Upload to S3
+→ Deploy on SageMaker → Create Endpoint
+→ Predict in real-time
+```
+
+---
+
+## 🎯 Example Use Case
+
+This project demonstrates:
+
+* End-to-end ML deployment
+* Real-time inference using AWS
+* Cloud-based model serving
+
+---
+
+## 🚀 Future Improvements
+
+* Connect endpoint to frontend (React/Web App)
+* Use real-world datasets
+* Replace SageMaker with Flask API for cost optimization
+
+---
+
+## 👩‍💻 Author
+
+Meenakshi Sharma
